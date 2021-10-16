@@ -1,0 +1,21 @@
+---
+- name: Build AWS Infra with Terraform
+  hosts: localhost
+  gather_facts: false
+  vars:
+    project_dir: "./terraform-code"
+    region: "eu-central-1"
+    vpc_cidr_block: "192.168.0.0/22"
+
+  tasks:
+    - name: Basic deploy of VPC
+      community.general.terraform:
+        project_path: '{{ project_dir }}'
+        state: absent
+        force_init: true
+        variables:
+          region: "{{ region }}"
+          vpc_cidr_block: "{{ vpc_cidr_block }}"
+      register: vpc_output
+
+    - debug: var=vpc_output
